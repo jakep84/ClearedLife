@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>Account confirmed — ClearedLife</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"><span>CL</span></span>
+      <span class="brand-text">Cleared<span>Life</span></span>
+    </a>
+  </header>
+
+  <main class="auth-shell">
+    <section style="max-width:680px;margin:80px auto;text-align:center">
+      <div class="eyebrow" style="justify-content:center">ClearedLife account</div>
+      <h1 style="font-size:clamp(42px,6vw,68px);letter-spacing:-.05em;margin:20px 0 18px">
+        Confirming your<br><span style="color:var(--green)">ClearedLife account.</span>
+      </h1>
+      <p id="confirm-message" style="color:#9fb0c2;font-size:17px;line-height:1.7">
+        Verifying your email and opening your Ready dashboard…
+      </p>
+      <div id="confirm-actions" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:28px"></div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth-return.js"></script>
+  <script>
+    window.va = window.va || function () {
+      (window.vaq = window.vaq || []).push(arguments);
+    };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
