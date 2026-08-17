@@ -1,0 +1,8 @@
+
+(function(){
+const f=location.pathname.split('/').pop();document.querySelectorAll('.nav a').forEach(a=>{if(a.getAttribute('href')===f)a.classList.add('active')});
+document.querySelectorAll('[data-tabs]').forEach(group=>{const target=document.querySelector(group.dataset.target);group.querySelectorAll('button').forEach(b=>b.onclick=()=>{group.querySelectorAll('button').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(target)target.innerHTML=b.dataset.html||''});group.querySelector('button')?.click()});
+document.querySelectorAll('[data-job-filter]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-job-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('[data-job]').forEach(j=>j.classList.toggle('hidden',b.dataset.jobFilter!=='all'&&!j.dataset.job.includes(b.dataset.jobFilter)))});
+const r=document.querySelector('#role'),t=document.querySelector('#target'),p=document.querySelector('#plan');function plan(){if(!r||!t||!p)return;p.innerHTML='<b>'+r.value+' → '+t.value+'</b><p>Benchmark your market value, identify roles matching your current eligibility, then target employers with real sponsorship or upgrade requirements instead of treating an upgrade as self-service.</p>'}r?.addEventListener('change',plan);t?.addEventListener('change',plan);plan();
+document.querySelectorAll('[data-dash-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-dash-tab]').forEach(x=>x.classList.remove('active'));document.querySelectorAll('[data-dash]').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelector('[data-dash="'+b.dataset.dashTab+'"]')?.classList.add('active')});
+})();
