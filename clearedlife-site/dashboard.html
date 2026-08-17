@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>My Ready Dashboard — ClearedLife</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark"><span>CL</span></span><span class="brand-text">Cleared<span>Life</span></span></a>
+    <a class="nav-cta" href="ready.html">Ready</a>
+  </header>
+  <main class="dashboard-shell">
+    <div class="dashboard-top">
+      <div><div class="eyebrow">ClearedLife Ready</div><h1>Welcome to your<br><span>Cleared Life.</span></h1><p>Your readiness result is now the starting point for a persistent preparation workspace. Complete weak areas, retake the assessment when useful, and keep your timeline organized.</p></div>
+      <div class="dashboard-user"><small>SIGNED IN AS</small><strong id="user-email">Loading…</strong><button id="sign-out">Sign out</button></div>
+    </div>
+
+    <section class="dashboard-grid">
+      <div class="dashboard-card">
+        <div class="kicker">LATEST READINESS</div><h2>Your preparation baseline</h2>
+        <div id="assessment-state"><div class="account-empty"><h3>Loading your readiness result…</h3></div></div>
+      </div>
+      <div class="dashboard-card">
+        <div class="kicker">NEXT MOVES</div><h2>Focus where it matters.</h2>
+        <p>ClearedLife uses your lowest-scoring categories to keep the preparation workspace focused.</p>
+        <div id="priority-list" class="priority-list"></div>
+      </div>
+    </section>
+
+    <section class="dashboard-card" style="margin-top:18px">
+      <div class="kicker">PREPARATION WORKSPACE</div><h2>Category progress</h2>
+      <p>Progress status is separate from the readiness score. Your score reflects the assessment; these controls reflect the work you have completed since then.</p>
+      <div id="task-list" class="task-list"></div>
+      <div class="dashboard-actions"><a class="button secondary" href="index.html#assessment">Retake assessment</a><a class="button secondary" href="vault.html">Preview Vault</a><a class="button secondary" href="guard.html">Preview Guard</a></div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="dashboard.js"></script>
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>Account — ClearedLife</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark"><span>CL</span></span><span class="brand-text">Cleared<span>Life</span></span></a>
+    <a class="nav-cta" href="ready.html">Explore Ready</a>
+  </header>
+  <main class="auth-shell">
+    <section class="auth-grid">
+      <div class="auth-copy">
+        <div class="eyebrow">Your ClearedLife account</div>
+        <h1>Keep your readiness work.<br><span>Pick up where you left off.</span></h1>
+        <p>Create a ClearedLife account to save your readiness score, track preparation progress, and build the foundation for your future Vault and Guard workflows.</p>
+        <div class="auth-benefits">
+          <div class="auth-benefit"><i>01</i><div><strong>Save your assessment</strong><span>Your latest readiness result follows your account.</span></div></div>
+          <div class="auth-benefit"><i>02</i><div><strong>Track preparation</strong><span>Mark categories not started, in progress, or complete.</span></div></div>
+          <div class="auth-benefit"><i>03</i><div><strong>Own your data</strong><span>Account data is protected by user-specific database policies.</span></div></div>
+        </div>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs"><button class="active" data-auth-tab="signup">Create account</button><button data-auth-tab="signin">Sign in</button></div>
+        <form id="signup-form" class="auth-form">
+          <label>First name</label><input id="signup-name" autocomplete="given-name" maxlength="80">
+          <label>Email</label><input id="signup-email" type="email" autocomplete="email" required>
+          <label>Password</label><input id="signup-password" type="password" autocomplete="new-password" minlength="8" required>
+          <button class="button primary full" type="submit">Create my ClearedLife account</button>
+        </form>
+        <form id="signin-form" class="auth-form hidden">
+          <label>Email</label><input id="signin-email" type="email" autocomplete="email" required>
+          <label>Password</label><input id="signin-password" type="password" autocomplete="current-password" required>
+          <button class="button primary full" type="submit">Sign in</button>
+        </form>
+        <div id="auth-status" class="auth-status" aria-live="polite"></div>
+        <div class="auth-note">ClearedLife uses Supabase Auth. If email confirmation is enabled, you may need to confirm your email before the first sign-in. No Supabase secret/service-role key is exposed in the browser.</div>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
