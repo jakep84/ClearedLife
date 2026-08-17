@@ -20,6 +20,12 @@ const observer = new IntersectionObserver(entries => {
 }, {threshold:.08});
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+function trackClearedLifeEvent(name, data = {}) {
+  if (typeof window.va === 'function') {
+    window.va('event', { name, data });
+  }
+}
+
 const questions = [
   {k:'RESIDENCE HISTORY', q:'Can you account for your residences for the time periods you expect to be asked about?', opts:[['Yes — dates, addresses, and verifiers are organized',3],['Mostly — I would need to fill a few gaps',2],['Not really — I would be reconstructing it',0]]},
   {k:'EMPLOYMENT HISTORY', q:'Do you have reliable dates and supervisor or verifier information for past employment?', opts:[['Yes — it is organized and easy to verify',3],['Mostly — a few contacts or dates are missing',2],['No — I would need significant research',0]]},
@@ -28,29 +34,111 @@ const questions = [
   {k:'CONSISTENCY', q:'Have you reviewed your timeline for unexplained gaps or conflicting dates?', opts:[['Yes — I have reviewed the full timeline',3],['Partially',1],['No',0]]},
   {k:'PRIOR RECORDS', q:'Do you have access to copies or records from prior clearance paperwork, if applicable?', opts:[['Yes, or this is my first submission',3],['I have some prior records',2],['No — I would need to locate/request them',0]]}
 ];
+
 let qi = 0;
-let score = 0;
+let answers = [];
 const quizContent = document.getElementById('quiz-content');
 const quizStep = document.getElementById('quiz-step');
 const quizBar = document.getElementById('quiz-progress-bar');
+
+function getReadinessBand(pct) {
+  if (pct >= 85) return {
+    label: 'Strong preparation',
+    band: 'strong',
+    detail: 'Your records appear well organized. A structured consistency review is the next step.'
+  };
+  if (pct >= 60) return {
+    label: 'Good foundation',
+    band: 'developing',
+    detail: 'You have a useful foundation. Focus on the categories where dates, contacts, or records still need reconstruction.'
+  };
+  return {
+    label: 'Preparation needed',
+    band: 'priority',
+    detail: 'Your biggest opportunity is organization. Build a reliable history before you are under a submission deadline.'
+  };
+}
+
 function renderQuestion(){
   if(!quizContent) return;
-  if(qi >= questions.length){ renderResult(); return; }
+  if(qi >= questions.length){ finishAssessment(); return; }
+
   const item = questions[qi];
   quizStep.textContent = `Question ${qi+1} of ${questions.length}`;
   quizBar.style.width = `${((qi+1)/questions.length)*100}%`;
-  quizContent.innerHTML = `<div class="quiz-question"><small>${item.k}</small><h3>${item.q}</h3><div class="quiz-options">${item.opts.map((o,i)=>`<button class="quiz-option" data-value="${o[1]}" data-index="${i}">${o[0]}</button>`).join('')}</div></div>`;
-  quizContent.querySelectorAll('.quiz-option').forEach(btn=>btn.addEventListener('click',()=>{score += Number(btn.dataset.value);qi++;renderQuestion();}));
+
+  quizContent.innerHTML = `
+    <div class="quiz-question">
+      <small>${item.k}</small>
+      <h3>${item.q}</h3>
+      <div class="quiz-options">
+        ${item.opts.map((o,i)=>`<button class="quiz-option" data-index="${i}">${o[0]}</button>`).join('')}
+      </div>
+    </div>`;
+
+  quizContent.querySelectorAll('.quiz-option').forEach(btn=>btn.addEventListener('click',()=>{
+    const selected = item.opts[Number(btn.dataset.index)];
+    answers.push({
+      key: item.k,
+      question: item.q,
+      answer: selected[0],
+      score: Number(selected[1]),
+      maxScore: 3
+    });
+    qi++;
+    renderQuestion();
+  }));
 }
-function renderResult(){
-  const max = questions.length*3;
-  const pct = Math.round((score/max)*100);
-  const label = pct >= 85 ? 'Strong preparation' : pct >= 60 ? 'Good start' : 'Needs preparation';
-  const detail = pct >= 85 ? 'Your records appear well organized. A structured review for consistency would be the next step.' : pct >= 60 ? 'You have a useful foundation. Focus next on the categories where you would still need to reconstruct dates or contacts.' : 'The biggest opportunity is organization. Start building a reliable timeline before you are under a submission deadline.';
-  quizStep.textContent = 'Readiness result'; quizBar.style.width = '100%';
-  quizContent.innerHTML = `<div class="quiz-result"><div class="result-score" style="--score-angle:${pct*3.6}deg"><strong>${pct}</strong><small>READINESS</small></div><h3>${label}</h3><p>${detail}</p><p><strong>This is a preparation score only.</strong> It does not predict or determine clearance eligibility.</p><div class="result-actions"><button class="button secondary" id="restart-quiz">Retake</button><a class="button primary" href="mailto:hello@clearedlife.com?subject=ClearedLife%20Early%20Access">Join early access</a></div></div>`;
-  document.getElementById('restart-quiz').addEventListener('click',()=>{qi=0;score=0;renderQuestion();});
+
+function finishAssessment(){
+  if (!quizContent) return;
+
+  const total = answers.reduce((sum, item) => sum + item.score, 0);
+  const max = questions.length * 3;
+  const pct = Math.round((total / max) * 100);
+  const readiness = getReadinessBand(pct);
+
+  const priorities = [...answers]
+    .sort((a,b) => a.score - b.score)
+    .slice(0,3)
+    .map(item => item.key);
+
+  const result = {
+    version: 1,
+    completedAt: new Date().toISOString(),
+    score: pct,
+    band: readiness.band,
+    label: readiness.label,
+    detail: readiness.detail,
+    answers,
+    priorities
+  };
+
+  try {
+    sessionStorage.setItem('clearedlifeAssessment', JSON.stringify(result));
+  } catch (error) {
+    console.warn('Unable to save assessment result for this browser session.');
+  }
+
+  trackClearedLifeEvent('Readiness Completed', {
+    score_band: readiness.band,
+    score_range: pct >= 85 ? '85-100' : pct >= 60 ? '60-84' : '0-59'
+  });
+
+  quizStep.textContent = 'Building your result…';
+  quizBar.style.width = '100%';
+  quizContent.innerHTML = `
+    <div class="quiz-result">
+      <div class="result-score" style="--score-angle:${pct*3.6}deg">
+        <strong>${pct}</strong><small>READINESS</small>
+      </div>
+      <h3>${readiness.label}</h3>
+      <p>Building your personalized readiness plan…</p>
+    </div>`;
+
+  window.setTimeout(() => window.location.assign('results.html'), 350);
 }
+
 renderQuestion();
 
 const eventGuidance = {
@@ -60,7 +148,16 @@ const eventGuidance = {
   legal:{title:'Arrests or other legal events may require prompt reporting.',body:'Record what occurred accurately and contact your security office/FSO. For legal or adjudicative strategy, use qualified legal counsel rather than software guidance.',link:'https://www.dcsa.mil/Personnel-Vetting/Background-Investigations-for-Applicants/Report-a-Security-Change-Concern-or-Threat/'},
   marriage:{title:'Relationship changes can affect information your security office maintains.',body:'Keep your personal history current and ask your security office what information or reporting is required in your specific program and position.',link:'https://www.dcsa.mil/Personnel-Vetting/Background-Investigations-for-Applicants/Report-a-Security-Change-Concern-or-Threat/'}
 };
+
 const eventResult = document.getElementById('event-result');
-function showEvent(key){const g=eventGuidance[key];if(!g||!eventResult)return;eventResult.innerHTML=`<strong>${g.title}</strong><p>${g.body}</p><a href="${g.link}" target="_blank" rel="noopener">Open official DCSA resource ↗</a>`;}
-document.querySelectorAll('#event-buttons button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('#event-buttons button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');showEvent(btn.dataset.event);}));
+function showEvent(key){
+  const g=eventGuidance[key];
+  if(!g||!eventResult)return;
+  eventResult.innerHTML=`<strong>${g.title}</strong><p>${g.body}</p><a href="${g.link}" target="_blank" rel="noopener">Open official DCSA resource ↗</a>`;
+}
+document.querySelectorAll('#event-buttons button').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('#event-buttons button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  showEvent(btn.dataset.event);
+}));
 showEvent('travel');

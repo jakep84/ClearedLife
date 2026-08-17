@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="description" content="Your ClearedLife readiness assessment results and personalized preparation plan." />
+  <title>Your Clearance Readiness Results — ClearedLife</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="results.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="ClearedLife home">
+      <span class="brand-mark"><span>CL</span></span>
+      <span class="brand-text">Cleared<span>Life</span></span>
+    </a>
+    <a class="nav-cta" href="index.html#assessment">Retake assessment</a>
+  </header>
+
+  <main class="results-shell">
+    <section class="results-hero">
+      <div>
+        <div class="eyebrow">Your free readiness report</div>
+        <h1>Your clearance preparation has a <span id="result-headline">clear next step.</span></h1>
+        <p id="result-detail">Loading your personalized assessment…</p>
+        <p class="results-disclaimer">
+          This is a preparation score only. It does not predict clearance eligibility or an adjudicative outcome.
+        </p>
+      </div>
+
+      <div class="score-panel">
+        <div class="result-score-large" id="score-ring">
+          <strong id="score-number">--</strong>
+          <small>READINESS</small>
+        </div>
+        <div>
+          <small>YOUR RESULT</small>
+          <h2 id="result-label">Loading…</h2>
+          <span class="score-band" id="score-band">Preparation score</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-grid">
+      <div class="result-main">
+        <div class="result-card">
+          <div class="card-kicker">CATEGORY BREAKDOWN</div>
+          <h2>Where you are ready—and where to focus next.</h2>
+          <div id="category-results" class="category-results"></div>
+        </div>
+
+        <div class="result-card">
+          <div class="card-kicker">YOUR NEXT 3 MOVES</div>
+          <h2>A simple preparation plan.</h2>
+          <div id="action-plan" class="action-plan"></div>
+        </div>
+
+        <div class="result-card trust-result">
+          <div class="card-kicker">WHAT THIS SCORE MEANS</div>
+          <h2>Preparation, not prediction.</h2>
+          <p>
+            ClearedLife measures whether the history and records you may need are organized and reviewable.
+            We do not attempt to predict whether the government will grant, deny, continue, or revoke eligibility.
+          </p>
+          <p>
+            When an official reporting, investigation, or adjudicative question matters, your responsible security
+            office, FSO, agency, or qualified counsel remains the authority.
+          </p>
+        </div>
+      </div>
+
+      <aside class="capture-card" id="capture">
+        <div class="capture-badge">CLEAREDLIFE EARLY ACCESS</div>
+        <h2>Save your result.</h2>
+        <p>Join the founding list and keep your readiness score connected to your ClearedLife early-access profile.</p>
+
+        <form id="lead-form" novalidate>
+          <label for="first-name">First name <span>optional</span></label>
+          <input id="first-name" name="firstName" type="text" autocomplete="given-name" maxlength="80" />
+
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com" />
+
+          <div class="honeypot" aria-hidden="true">
+            <label for="company">Company</label>
+            <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <label class="consent-row">
+            <input id="consent" name="consent" type="checkbox" required />
+            <span>I want ClearedLife product updates and early-access invitations. I can unsubscribe anytime.</span>
+          </label>
+
+          <button class="button primary full" id="lead-submit" type="submit">Save result & join early access</button>
+          <div id="form-status" class="form-status" aria-live="polite"></div>
+        </form>
+
+        <div class="capture-trust">
+          <strong>No SF-86 details are submitted.</strong>
+          <span>Your detailed answer text stays in this browser session. ClearedLife stores your email, optional first name, overall readiness score/band, and category scores.</span>
+        </div>
+
+        <a class="privacy-link" href="privacy.html">Privacy</a>
+      </aside>
+    </section>
+
+    <section class="results-next">
+      <div>
+        <div class="eyebrow">Coming next</div>
+        <h2>Turn this one-time score into a record you keep.</h2>
+        <p>ClearedLife Vault will organize residence, employment, travel, contact, and recurring-update history without making you rebuild years of information from scratch.</p>
+      </div>
+      <a class="button secondary" href="index.html#platform">Explore ClearedLife</a>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-bottom">
+      <span>© 2026 ClearedLife. All rights reserved.</span>
+      <span>Not affiliated with DCSA or the U.S. Government.</span>
+    </div>
+  </footer>
+
+  <script>
+    window.va = window.va || function () {
+      (window.vaq = window.vaq || []).push(arguments);
+    };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script src="results.js"></script>
+</body>
+</html>
